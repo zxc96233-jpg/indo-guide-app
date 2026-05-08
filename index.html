@@ -18,7 +18,7 @@
     function sendMessage() {
       const userMessage = document.getElementById("userMessage").value;
       
-      fetch("https://script.google.com/macros/s/AKfycbwVkTWI5KTZtwnkruLWL1ia3uZu5hR9EkHNosokUMihvMsHuiAMwUzcx_bVYiKst4hXCw/exec", {
+      fetch("https://script.google.com/macros/s/AKfycbzTua8dXmUrQDf3enMVQbVxvj08BKYDT2vPWShzgNxLX4qyrRbfzcPiDFroxx_4252SkQ/exec", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ message: userMessage })
