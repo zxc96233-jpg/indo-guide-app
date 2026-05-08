@@ -7,7 +7,7 @@
 <body>
   <h2>تجربة الاتصال مع Google Apps Script</h2>
   
-  <!-- صندوق إدخال الرسالة -->
+  <!-- إدخال الرسالة -->
   <input type="text" id="userMessage" placeholder="اكتب رسالتك هنا">
   <button onclick="sendMessage()">إرسال</button>
   
@@ -18,7 +18,7 @@
     function sendMessage() {
       const userMessage = document.getElementById("userMessage").value;
       
-      fetch("https://script.google.com/macros/s/AKfycbwYfCkJpBvM3nXnbiNuiMDA6YuxPf8ElcNTAfQe5giSpjS87Q_Gx7jm0uX9pxaKzt6hVw/exec", {
+      fetch("https://script.google.com/macros/s/AKfycbwVkTWI5KTZtwnkruLWL1ia3uZu5hR9EkHNosokUMihvMsHuiAMwUzcx_bVYiKst4hXCw/exec", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ message: userMessage })
