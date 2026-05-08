@@ -1,80 +1,36 @@
 <!DOCTYPE html>
-<html lang="ar" dir="rtl">
+<html lang="ar">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Indo Guide AI</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <style>
-        body { font-family: system-ui, -apple-system, sans-serif; background-color: #f0f2f5; }
-        .chat-container { height: calc(100vh - 160px); }
-    </style>
+  <meta charset="UTF-8">
+  <title>Indo Guide</title>
 </head>
-<body class="flex flex-col h-screen">
-    <div class="bg-blue-800 p-4 text-white text-center font-bold shadow-lg text-lg">
-        INDO GUIDE AI 🇮🇩
-    </div>
+<body>
+  <h2>تجربة الاتصال مع Google Apps Script</h2>
+  
+  <!-- صندوق إدخال الرسالة -->
+  <input type="text" id="userMessage" placeholder="اكتب رسالتك هنا">
+  <button onclick="sendMessage()">إرسال</button>
+  
+  <!-- مكان عرض الرد -->
+  <div id="replyBox" style="margin-top:20px; color:blue;"></div>
 
-    <div id="chat-box" class="chat-container overflow-y-auto p-4 space-y-4">
-        <div class="bg-white p-3 rounded-lg shadow-sm border border-gray-200 max-w-[85%] text-sm">
-            مرحباً! أنا خبيرك الذكي في إندونيسيا. كيف يمكنني مساعدتك اليوم؟
-        </div>
-    </div>
-
-    <div id="loader" class="hidden px-5 text-blue-600 text-xs animate-pulse font-bold">جاري التفكير...</div>
-
-    <div class="p-4 bg-white border-t flex gap-2 items-center">
-        <input type="text" id="userInput" placeholder="اسأل عن جاكرتا أو العقارات..." 
-               class="flex-1 border rounded-full px-4 py-3 outline-none focus:border-blue-500 text-sm">
-        <button onclick="sendToAI()" class="bg-blue-700 text-white p-3 rounded-full hover:bg-blue-800 transition-all shadow-md">
-            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8" />
-            </svg>
-        </button>
-    </div>
-
-    <script>
-        // هذا هو الرابط الذي استخرجته أنت بنجاح
-        const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwEv5c2YAUIu1heb2X16l8eNtw0wRqfbEySTEpGUT5g59XVxKKTstbXUkUCgKC2MZVMQg/exec";
-
-        async function sendToAI() {
-            const input = document.getElementById('userInput');
-            const chatBox = document.getElementById('chat-box');
-            const loader = document.getElementById('loader');
-            const message = input.value.trim();
-
-            if (!message) return;
-
-            // إظهار رسالة المستخدم
-            chatBox.innerHTML += `<div class="bg-blue-600 text-white p-3 rounded-lg self-end ml-auto max-w-[85%] shadow-md text-sm">${message}</div>`;
-            input.value = "";
-            loader.classList.remove('hidden');
-            chatBox.scrollTop = chatBox.scrollHeight;
-
-            try {
-                const response = await fetch(SCRIPT_URL, {
-                    method: "POST",
-                    body: JSON.stringify({ message: "أنت خبير سياحة وعقارات في إندونيسيا. أجب بالعربية وباختصار: " + message })
-                });
-                
-                const data = await response.json();
-                const reply = data.candidates[0].content.parts[0].text;
-                
-                // إظهار رد الذكاء الاصطناعي
-                chatBox.innerHTML += `<div class="bg-white p-3 rounded-lg shadow-sm border border-gray-200 max-w-[85%] text-gray-800 text-sm italic">${reply}</div>`;
-            } catch (error) {
-                chatBox.innerHTML += `<div class="text-red-500 text-center text-xs p-2">عذراً، حدث خطأ في الاتصال. تأكد من تفعيل السكريبت.</div>`;
-                console.error(error);
-            } finally {
-                loader.classList.add('hidden');
-                chatBox.scrollTop = chatBox.scrollHeight;
-            }
-        }
-
-        // إمكانية الإرسال عبر زر Enter
-        document.getElementById('userInput').addEventListener('keypress', function (e) {
-            if (e.key === 'Enter') sendToAI();
-        });
-    </script>
+  <script>
+    function sendMessage() {
+      const userMessage = document.getElementById("userMessage").value;
+      
+      fetch("https://script.google.com/macros/s/AKfycbwYfCkJpBvM3nXnbiNuiMDA6YuxPf8ElcNTAfQe5giSpjS87Q_Gx7jm0uX9pxaKzt6hVw/exec", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ message: userMessage })
+      })
+      .then(response => response.json())
+      .then(data => {
+        document.getElementById("replyBox").innerText = data.reply;
+      })
+      .catch(error => {
+        document.getElementById("replyBox").innerText = "حصل خطأ أثناء الاتصال: " + error;
+      });
+    }
+  </script>
 </body>
 </html>
